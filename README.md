@@ -1,4 +1,4 @@
-# FSGS: Real-Time Few-Shot View Synthesis using Gaussian Splatting
+# See In Detail: Enhancing Sparse-view 3D Gaussian Splatting with Local Depth and Semantic Regularization
 
 
 
@@ -23,7 +23,7 @@
 We provide install method based on Conda package and environment management:
 ```bash
 conda env create --file environment.yml
-conda activate FSGS
+conda activate SIDGaussian
 ```
 **CUDA 11.7** is strongly recommended.
 
