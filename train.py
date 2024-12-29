@@ -25,7 +25,8 @@ from random import randint
 import gaussian_utils.loss_utils as loss_utils
 from gaussian_utils.loss_utils import l1_loss, l1_loss_mask, l2_loss, ssim, get_vit_feature, PatchSWDLoss
 from gaussian_utils.depth_utils import estimate_depth
-from gaussian_renderer import render, network_gui
+# from gaussian_renderer import render, network_gui
+from gaussian_renderer import render
 import sys
 from scene import Scene, GaussianModel
 from gaussian_utils.general_utils import safe_state
@@ -35,21 +36,13 @@ from gaussian_utils.image_utils import psnr
 from argparse import ArgumentParser, Namespace
 from arguments import ModelParams, PipelineParams, OptimizationParams
 from lpipsPyTorch import lpips
-# from FDL_pytorch import FDL_loss
 from gaussian_utils.extractor import VitExtractor
 import torch.nn.functional as F
-# from gaussian_scene.cameras import Camera
 import random
-from run_point_cloud_densification import realtimePointsDensification, point_cloud_to_depth
-
-# from gaussian_scene.colmap_loader import read_extrinsics_text, read_intrinsics_text, qvec2rotmat, \
-#     read_extrinsics_binary, read_intrinsics_binary, read_points3D_binary, read_points3D_text
-
-# from gaussian_scene.dataset_readers import fetchPly, storePly
 
 import imageio
 
-
+# Uncomment the following line to attach a debugger
 # def attach_debugger():
 #     import debugpy
 #     debugpy.listen(2003)
@@ -85,21 +78,21 @@ def training(dataset, opt, pipe, args, metrics):
     vit_ext0 = VitExtractor(model_name='dino_vits16', device="cuda:0")
 
     for iteration in range(first_iter, opt.iterations + 1):
-        if network_gui.conn == None:
-            network_gui.try_connect()
-        while network_gui.conn != None:
-            try:
-                net_image_bytes = None
-                custom_cam, do_training, pipe.convert_SHs_python, pipe.compute_cov3D_python, keep_alive, scaling_modifer = network_gui.receive()
-                if custom_cam != None:
-                    net_image = render(custom_cam, gaussians, pipe, background, scaling_modifer)["render"]
-                    net_image_bytes = memoryview((torch.clamp(net_image, min=0, max=1.0) * 255).byte().permute(1, 2,
-                                                                                                               0).contiguous().cpu().numpy())
-                network_gui.send(net_image_bytes, dataset.source_path)
-                if do_training and ((iteration < int(opt.iterations)) or not keep_alive):
-                    break
-            except Exception as e:
-                network_gui.conn = None
+        # if network_gui.conn == None:
+        #     network_gui.try_connect()
+        # while network_gui.conn != None:
+        #     try:
+        #         net_image_bytes = None
+        #         custom_cam, do_training, pipe.convert_SHs_python, pipe.compute_cov3D_python, keep_alive, scaling_modifer = network_gui.receive()
+        #         if custom_cam != None:
+        #             net_image = render(custom_cam, gaussians, pipe, background, scaling_modifer)["render"]
+        #             net_image_bytes = memoryview((torch.clamp(net_image, min=0, max=1.0) * 255).byte().permute(1, 2,
+        #                                                                                                        0).contiguous().cpu().numpy())
+        #         network_gui.send(net_image_bytes, dataset.source_path)
+        #         if do_training and ((iteration < int(opt.iterations)) or not keep_alive):
+        #             break
+        #     except Exception as e:
+        #         network_gui.conn = None
 
         # Render
         if (iteration - 1) == debug_from:
@@ -122,13 +115,6 @@ def training(dataset, opt, pipe, args, metrics):
         Ll1 = l1_loss_mask(image, gt_image)
         loss_l1_ssim = ((1.0 - opt.lambda_dssim) * Ll1 + opt.lambda_dssim * (1.0 - ssim(image, gt_image)))
         loss = loss_l1_ssim
-
-        # FDL Loss
-        # if iteration > 7000 and iteration < 9000:
-        #     fdl_loss = FDL_loss().cuda()
-        #     loss_fdl = fdl_loss(image, gt_image)
-        #     lambda_fdl = args.fdl/100000
-        #     loss += lambda_fdl * loss_fdl
 
         rendered_depth = render_pkg["depth"][0]  # (378 504)
         midas_depth = torch.tensor(viewpoint_cam.depth_image).cuda()
@@ -366,32 +352,23 @@ if __name__ == "__main__":
     print(args.test_iterations)
 
     print("Optimizing " + args.model_path)
-    # test_result = []
-    metrics = {
-        'PSNR': [],
-        'SSIM': [],
-        'LPIPS': []
-    }
+    metrics = {'PSNR': [], 'SSIM': [], 'LPIPS': []}
 
     # Initialize system state (RNG)
     safe_state(args.quiet)
 
     # Start GUI server, configure and run training
     # network_gui.init(args.ip, args.port)
+
     torch.autograd.set_detect_anomaly(args.detect_anomaly)
     training(lp.extract(args), op.extract(args), pp.extract(args), args, metrics)
 
-    # All done
     print("\nTraining complete.")
+    
+    # Saving scores
     import json
-
     output_dir = os.path.dirname(args.model_path)
-    output_data = {
-        "PSNR": metrics['PSNR'],
-        "SSIM": metrics['SSIM'],
-        "LPIPS": metrics['LPIPS'],
-        "scene": scene
-    }
+    output_data = {"PSNR": metrics['PSNR'], "SSIM": metrics['SSIM'], "LPIPS": metrics['LPIPS'], "scene": scene}
     output_path = os.path.join(output_dir, "test_results.json")
     with open(output_path, "a+") as f:
         json.dump(output_data, f, indent=4)
