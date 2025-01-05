@@ -342,6 +342,7 @@ if __name__ == "__main__":
     parser.add_argument("--D", type=float, default=0.8) # dino
     parser.add_argument("--N", type=float, default=1.0) # total depth
     args = parser.parse_args(sys.argv[1:])
+    print('args:',args.W, args.D, args.N)
     # args.save_iterations.append(args.iterations)
     scene_data_dir = lp.extract(args).source_path
     scene = scene_data_dir.split('/')[-1]
