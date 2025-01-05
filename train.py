@@ -158,17 +158,11 @@ def training(dataset, opt, pipe, args, metrics):
             rn = random.randint(0, rendered_pseudo_windows.shape[0] - 1)
             rendered_pseudo_windows = rendered_pseudo_windows[rn].reshape(-1, 1)
             midas_pseudo_windows = midas_pseudo_windows[rn].reshape(-1, 1)
-            # patch_depth_loss_pseudo = (1 - pearson_corrcoef(rendered_pseudo_windows, -midas_pseudo_windows)).mean()
 
             # ---------------------- local depth normalization ----------------------
             nrpw0 = loss_utils.normalize0(rendered_pseudo_windows)
             nmpw0 = loss_utils.normalize0(midas_pseudo_windows)
             patch_depth_loss_pseudo = (1 - pearson_corrcoef(nrpw0, -nmpw0)).mean()
-
-            # ---------------------- global depth normalization ----------------------
-            # nrpwg = loss_utils.normalize0(rendered_pseudo_windows,std = rendered_depth_pseudo0.std().detach())
-            # nmpwg = loss_utils.normalize0(midas_pseudo_windows,std = midas_depth_pseudo0.std().detach())
-            # global_depth_loss = loss_utils.margin_l2_loss(nrpwg, nmpwg, 0.0002, False)
 
             if torch.isnan(depth_loss_pseudo).sum() == 0:
                 loss_scale = min((iteration - args.start_sample_pseudo) / 500., 1)
