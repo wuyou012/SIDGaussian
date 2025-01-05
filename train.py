@@ -179,7 +179,8 @@ def training(dataset, opt, pipe, args, metrics):
 
             # ---------------------- crop dino psoude ----------------------
             rendered_image_pseudo = render_pkg_pseudo["render"]
-            gt_crop, rendered_crop = loss_utils.random_crop1(gt_image, rendered_image_pseudo, (84, 63))
+            gt_crop, rendered_crop = loss_utils.random_crop1(gt_image, rendered_image_pseudo, (84, 63))  # for llff dataset
+            # gt_crop, rendered_crop = loss_utils.random_crop3(gt_image, rendered_image_pseudo ,(83,63))  # for mipnerf 360 dataset
             render_crop_pseudo_vit = get_vit_feature(rendered_crop.unsqueeze(0), vit_ext0)
             gt_crop_vit = get_vit_feature(gt_crop.unsqueeze(0), vit_ext0)
             side_loss_dino = F.mse_loss(render_crop_pseudo_vit, gt_crop_vit)
