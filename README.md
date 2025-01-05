@@ -107,7 +107,7 @@ Special thanks to the following awesome projects!
 ## Citation
 If you find our work useful for your project, please consider citing the following paper.
 
-
+<div style='display: none'>
 ```
 @misc{zhu2023FSGS, 
 title={FSGS: Real-Time Few-Shot View Synthesis using Gaussian Splatting}, 
@@ -118,3 +118,4 @@ archivePrefix={arXiv},
 primaryClass={cs.CV} 
 }
 ```
+</div>
