@@ -172,7 +172,7 @@ def training(dataset, opt, pipe, args, metrics):
 
             if torch.isnan(depth_loss_pseudo).sum() == 0:
                 loss_scale = min((iteration - args.start_sample_pseudo) / 500., 1)
-                loss_depth_pseudo = loss_scale * args.W * (depth_loss_pseudo + 0.5 * patch_depth_loss_pseudo)
+                loss_depth_pseudo = loss_scale * args.N * (depth_loss_pseudo + args.W * patch_depth_loss_pseudo)
                 loss += loss_depth_pseudo
 
             # ---------------------- crop dino psoude ----------------------
@@ -339,9 +339,9 @@ if __name__ == "__main__":
     parser.add_argument("--checkpoint_iterations", nargs="+", type=int, default=[])
     parser.add_argument("--start_checkpoint", type=str, default=None)
     parser.add_argument("--train_bg", action="store_true")
-    parser.add_argument("--W", type=float, default=0.5)
-    parser.add_argument("--D", type=float, default=0.8)
-    parser.add_argument("--N", type=float)
+    parser.add_argument("--W", type=float, default=0.5) # window
+    parser.add_argument("--D", type=float, default=0.8) # dino
+    parser.add_argument("--N", type=float, default=1.0) # total depth
     args = parser.parse_args(sys.argv[1:])
     # args.save_iterations.append(args.iterations)
     scene_data_dir = lp.extract(args).source_path
