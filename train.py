@@ -23,7 +23,7 @@ from torchmetrics import PearsonCorrCoef
 from torchmetrics.functional.regression import pearson_corrcoef
 from random import randint
 import gaussian_utils.loss_utils as loss_utils
-from gaussian_utils.loss_utils import l1_loss, l1_loss_mask, l2_loss, ssim, get_vit_feature, PatchSWDLoss
+from gaussian_utils.loss_utils import l1_loss, l1_loss_mask, l2_loss, ssim, get_vit_feature
 from gaussian_utils.depth_utils import estimate_depth
 # from gaussian_renderer import render, network_gui
 from gaussian_renderer import render
@@ -73,8 +73,6 @@ def training(dataset, opt, pipe, args, metrics):
     ema_loss_for_log = 0.0
     first_iter += 1
 
-    # dino
-    # vit_ext = VitExtractor(model_name='dino_vits16', device="cuda:1")
     vit_ext0 = VitExtractor(model_name='dino_vits16', device="cuda:0")
 
     for iteration in range(first_iter, opt.iterations + 1):
@@ -145,8 +143,8 @@ def training(dataset, opt, pipe, args, metrics):
 
             rdp4 = rendered_depth_pseudo.unsqueeze(0).unsqueeze(0)
             mdp4 = midas_depth_pseudo.unsqueeze(0).unsqueeze(0)
-            rendered_pseudo_windows = loss_utils.window_partition(rdp4, 126)
-            midas_pseudo_windows = loss_utils.window_partition(mdp4, 126)
+            rendered_pseudo_windows = loss_utils.window_partition3(rdp4, 126,64)
+            midas_pseudo_windows = loss_utils.window_partition3(mdp4, 126,64)
 
             rendered_depth_pseudo0 = rendered_depth_pseudo.reshape(-1, 1)  # [190512, 1]
             midas_depth_pseudo0 = midas_depth_pseudo.reshape(-1, 1)
