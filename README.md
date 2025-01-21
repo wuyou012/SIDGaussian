@@ -7,7 +7,7 @@
   Kin-Chung Chan ·
   <a href="https://yushenzuo.github.io/">Yushen Zuo</a><sup></sup> ·
   <a href="https://junxiao01.github.io/">Jun Xiao</a><sup>+</sup> ·
-  <a href="https://hszhao.github.io/">Kin-Man Lam</a><sup></sup>
+  <a href="https://www.eie.polyu.edu.hk/~enkmlam/">Kin-Man Lam</a><sup></sup>
 </p>
 <p align="center"><sup>*</sup>Equal Contribution · <sup>+</sup>Corresponding Author</p>
 
