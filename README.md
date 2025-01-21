@@ -9,8 +9,10 @@
   <a href="https://junxiao01.github.io/">Jun Xiao</a><sup>+</sup> ·
   <a href="https://hszhao.github.io/">Kin-Man Lam</a><sup></sup>
 </p>
-<p align="center">The Hong Kong Polytechnic University
 <p align="center"><sup>*</sup>Equal Contribution · <sup>+</sup>Corresponding Author</p>
+
+<h3 align="center">ICASSP 2025</h3>
+
 
 [//]: # (###  [Project]&#40;https://zehaozhu.github.io/FSGS/&#41; | [Arxiv]&#40;https://arxiv.org/abs/2312.00451&#41;)
 
