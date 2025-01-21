@@ -1,6 +1,14 @@
-# See In Detail: Enhancing Sparse-view 3D Gaussian Splatting with Local Depth and Semantic Regularization
+<h1 align="center"><strong>SIDGaussian</strong></h1>
+<h2 align="center">See In Detail: Enhancing Sparse-view 3D Gaussian Splatting with Local Depth and Semantic Regularization</h2>
 
-
+<p align="center">
+  Zongqi He<sup>*</sup> ·
+  <a href="http://zachary-zhexiao.github.io/">Zhe Xiao</a><sup>*</sup> ·
+  Kin-Chung Chan ·
+  <a href="https://yushenzuo.github.io/">Yushen Zuo</a><sup></sup> ·
+  <a href="https://junxiao01.github.io/">Jun Xiao</a><sup></sup> ·
+  <a href="https://hszhao.github.io/">Kin-Man Lam</a><sup></sup>
+</p>
 
 [//]: # (###  [Project]&#40;https://zehaozhu.github.io/FSGS/&#41; | [Arxiv]&#40;https://arxiv.org/abs/2312.00451&#41;)
 
