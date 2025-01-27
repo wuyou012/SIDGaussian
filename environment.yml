@@ -1,4 +1,4 @@
-name: FSGS
+name: SIDGaussian
 channels:
   - pytorch
   - conda-forge
