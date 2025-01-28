@@ -47,71 +47,45 @@ We provide install method based on Conda package and environment management:
 conda env create --file environment.yml
 conda activate SIDGaussian
 ```
-**CUDA 11.7** is strongly recommended.
+We use **CUDA 11.7** as our environment.
 
 ## Data Preparation
-In data preparation step, we reconstruct the sparse view inputs using SfM using the camera poses provided by datasets. Next, we continue the dense stereo matching under COLMAP with the function `patch_match_stereo` and obtain the fused stereo point cloud from `stereo_fusion`. 
-
-``` 
-cd SIDGaussian
-mkdir dataset 
-cd dataset
-
-# download LLFF dataset
-gdown 16VnMcF1KJYxN9QId6TClMsZRahHNMW5g
-
-# run colmap to obtain initial point clouds with limited viewpoints
-python tools/colmap_llff.py
-
-# download MipNeRF-360 dataset
-wget http://storage.googleapis.com/gresearch/refraw360/360_v2.zip
-unzip -d mipnerf360 360_v2.zip
-
-# run colmap on MipNeRF-360 dataset
-python tools/colmap_360.py
-``` 
-
-
-We use the latest version of colmap to preprocess the datasets. If you meet issues on installing colmap, we provide a docker option. 
-``` 
-# if you can not install colmap, follow this to build a docker environment
-docker run --gpus all -it --name fsgs_colmap --shm-size=32g  -v /home:/home colmap/colmap:latest /bin/bash
-apt-get install pip
-pip install numpy
-python3 tools/colmap_llff.py
-``` 
-
-
-We provide both the sparse and dense point cloud after we proprecess them. You may download them [through this link](https://drive.google.com/drive/folders/1lYqZLuowc84Dg1cyb8ey3_Kb-wvPjDHA?usp=sharing). We use dense point cloud during training but you can still try sparse point cloud on your own.
+We use dense point cloud from [FSGS](https://github.com/VITA-Group/FSGS?tab=readme-ov-file#data-preparation) for dense initialization.
 
 ## Training
-Train FSGS on LLFF dataset with 3 views
+Train SIDGaussian on LLFF dataset with 3 views
 ``` 
-python train.py  --source_path dataset/nerf_llff_data/horns --model_path output/horns --eval  --n_views 3 --sample_pseudo_interval 1
+for SCENE in fern flower fortress horns leaves orchids room trex
+do
+  CUDA_VISIBLE_DEVICES=0 python train.py --source_path dataset/nerf_llff_data/$SCENE --model_path output_llff/$SCENE --eval --n_views 3 --sample_pseudo_interval 1 --D 0.8 --W 0.5 --N 1
+done
 ``` 
 
 
-Train FSGS on MipNeRF-360 dataset with 24 views
+Train SIDGaussian on MipNeRF-360 dataset with 24 views
 ``` 
-python train.py  --source_path dataset/mipnerf360/garden --model_path output/garden  --eval  --n_views 24 --depth_pseudo_weight 0.03  
+for SCENE in bonsai counter garden kitchen room stump bicycle
+do
+  CUDA_VISIBLE_DEVICES=0 python train.py --source_path /home/data1/mipnerf360/$SCENE --model_path output_mip/$SCENE --eval --n_views 24 --D 0.1 --W 0.25 --N 0.05
+done
 ``` 
 
 
 ## Rendering
-Run the following script to render the images.  
+To render images:
 
 ```
-python render.py --source_path dataset/nerf_llff_data/horns/  --model_path  output/horns --iteration 10000
+python render.py --source_path dataset/nerf_llff_data/fern/  --model_path  output/fern --iteration 10000
 ```
 
-You can customize the rendering path as same as NeRF by adding `video` argument
+To render a video:
 
 ```
-python render.py --source_path dataset/nerf_llff_data/horns/  --model_path  output/horns --iteration 10000  --video  --fps 30
+python render.py --source_path dataset/nerf_llff_data/fern/  --model_path  output/fern --iteration 10000  --video  --fps 30
 ```
 
 ## Evaluation
-You can just run the following script to evaluate the model.  
+The training code train.py automatically save evaluation scores, you can also run the following script to evaluate the model.
 
 ```
 python metrics.py --source_path dataset/nerf_llff_data/horns/  --model_path  output/horns --iteration 10000
@@ -119,25 +93,20 @@ python metrics.py --source_path dataset/nerf_llff_data/horns/  --model_path  out
 
 ## Acknowledgement
 
-Special thanks to the following awesome projects!
+Thanks to the following awesome open source projects!
 
 - [Gaussian-Splatting](https://github.com/graphdeco-inria/gaussian-splatting)
-- [DreamGaussian](https://github.com/ashawkey/diff-gaussian-rasterization)
-- [SparseNeRF](https://github.com/Wanggcong/SparseNeRF)
-- [MipNeRF-360](https://github.com/google-research/multinerf)
+- [NeRF](https://github.com/bmild/nerf)
+- [FSGS](https://github.com/VITA-Group/FSGS)
 
 ## Citation
-If you find our work useful for your project, please consider citing the following paper.
-
-<!--
+If you find this project useful, please consider citing:
 ```
-@misc{zhu2023FSGS, 
-title={FSGS: Real-Time Few-Shot View Synthesis using Gaussian Splatting}, 
-author={Zehao Zhu and Zhiwen Fan and Yifan Jiang and Zhangyang Wang}, 
-year={2023},
-eprint={2312.00451},
-archivePrefix={arXiv},
-primaryClass={cs.CV} 
+@article{he2025see,
+  title={See In Detail: Enhancing Sparse-view 3D Gaussian Splatting with Local Depth and Semantic Regularization},
+  author={He, Zongqi and Xiao, Zhe and Chan, Kin-Chung and Zuo, Yushen and Xiao, Jun and Lam, Kin-Man},
+  journal={arXiv preprint arXiv:2501.11508},
+  year={2025}
 }
 ```
--->
+
