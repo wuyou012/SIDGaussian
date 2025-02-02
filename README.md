@@ -90,7 +90,7 @@ python metrics.py --source_path dataset/nerf_llff_data/horns/  --model_path  out
 Thanks to the following awesome open source projects!
 
 - [Gaussian-Splatting](https://github.com/graphdeco-inria/gaussian-splatting)
-- [NeRF](https://github.com/bmild/nerf)
+- [LLFF](https://github.com/Fyusion/LLFF)
 - [FSGS](https://github.com/VITA-Group/FSGS)
 
 ## Citation
