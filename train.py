@@ -448,13 +448,23 @@ if __name__ == "__main__":
     print("\nTraining complete.")
 
     # Saving scores
+    import json
     output_dir = os.path.dirname(args.model_path)
     output_data = {
+        "scene": scene_name,
         "PSNR": metrics['PSNR'],
         "SSIM": metrics['SSIM'],
-        "LPIPS": metrics['LPIPS'],
-        "scene": scene_name
+        "LPIPS": metrics['LPIPS']
     }
     output_path = os.path.join(output_dir, "test_results.json")
-    with open(output_path, "a+") as f:
-        json.dump(output_data, f, indent=4)
+    
+    if os.path.exists(output_path):
+        with open(output_path, "r") as f:
+            existing_data = json.load(f)
+    else:
+        existing_data = []
+
+    existing_data.append(output_data)
+
+    with open(output_path, "w") as f:
+        json.dump(existing_data, f, indent=4)
