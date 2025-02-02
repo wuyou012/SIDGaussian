@@ -13,12 +13,6 @@
 
 <h3 align="center">ICASSP 2025</h3>
 
-<!-- <a align="center" href="https://arxiv.org/abs/2501.11508"><img src="https://img.shields.io/badge/cs.CV-Paper-b31b1b?logo=arxiv&logoColor=red" alt="Paper"></a> -->
-
-<!-- <center></center> -->
-
-<!--[![Paper](https://img.shields.io/badge/cs.CV-Paper-b31b1b?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2501.11508) -->
-
 <div align="center">
     <a href="https://arxiv.org/abs/2501.11508">
         <img src="https://img.shields.io/badge/cs.CV-Paper-b31b1b?logo=arxiv&logoColor=red" alt="Paper">
@@ -26,29 +20,18 @@
 </div>
 
 
-
-<!-- <div style="display: flex; align - items: center; justify - content: center;">
-    <h3>ICASSP 2025</h3>
-    <a href="https://arxiv.org/abs/2501.11508"><img src="https://img.shields.io/badge/cs.CV-Paper-b31b1b?logo=arxiv&logoColor=red" alt="Paper"></a>
-</div> -->
-
-<!-- [![Project Page](https://img.shields.io/badge/FSGS-Website-blue?logo=googlechrome&logoColor=blue)](https://zehaozhu.github.io/FSGS/)
-[![Video](https://img.shields.io/badge/YouTube-Video-c4302b?logo=youtube&logoColor=red)](https://youtu.be/CarJgsx3DQY)
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FVITA-Group%2FFSGS&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com) -->
-
-
-<!--
----------------------------------------------------
-<p align="center" >
-  <a href="">
-    <img src="https://github.com/zhiwenfan/zhiwenfan.github.io/blob/master/Homepage_files/videos/FSGS_gif.gif?raw=true" alt="demo" width="85%">
-  </a>
+<p align="center">
+  <img src="assets/Pipeline.png" alt="pipeline" width="100%">
 </p>
--->
+
+## Abstract
+3D Gaussian Splatting (3DGS) has shown remarkable performance in novel view synthesis. However, its rendering quality deteriorates with sparse inphut views, leading to distorted content and reduced details. This limitation hinders its practical application. To address this issue, we propose a sparse-view 3DGS method. Given the inherently ill-posed nature of sparse-view rendering, incorporating prior information is crucial. We propose a semantic regularization technique, using features extracted from the pretrained DINO-ViT model, to ensure multi-view semantic consistency. Additionally, we propose local depth regularization, which constrains depth values to improve generalization on unseen views. Our method outperforms state-of-the-art novel view synthesis approaches, achieving up to 0.4dB improvement in terms of PSNR on the LLFF dataset, with reduced distortion and enhanced visual quality.
+
 
 ## Environmental Setups
 We provide install method based on Conda package and environment management:
 ```bash
+git clone https://github.com/wuyou012/SIDGaussian.git
 conda env create --file environment.yml
 conda activate SIDGaussian
 ```
