@@ -19,6 +19,7 @@
     </a>
 </div>
 
+<br>
 
 <p align="center">
   <img src="assets/Pipeline.png" alt="pipeline" width="100%">
