@@ -56,8 +56,10 @@ We use **CUDA 11.7** as our environment.
 
 ## Data Preparation
 We use dense point cloud from [FSGS](https://github.com/VITA-Group/FSGS?tab=readme-ov-file#data-preparation) for initialization.
-You may directly download through [this link](https://drive.google.com/drive/folders/1lYqZLuowc84Dg1cyb8ey3_Kb-wvPjDHA)
+
+You may directly download through [this link](https://drive.google.com/drive/folders/1lYqZLuowc84Dg1cyb8ey3_Kb-wvPjDHA).
 ## Training
+<!--
 Train SIDGaussian on LLFF dataset with 3 views
 ``` 
 for SCENE in fern flower fortress horns leaves orchids room trex
@@ -74,7 +76,11 @@ do
   CUDA_VISIBLE_DEVICES=0 python train.py --source_path /home/data1/mipnerf360/$SCENE --model_path output_mip/$SCENE --eval --n_views 24 --D 0.1 --W 0.25 --N 0.05
 done
 ``` 
-
+-->
+Train SIDGaussian on LLFF dataset with 3 views
+``` 
+bash scripts_train/llff.sh
+``` 
 
 ## Rendering
 To render images:
