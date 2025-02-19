@@ -85,20 +85,20 @@ bash scripts_train/llff.sh
 To render images:
 
 ```
-python render.py --source_path dataset/nerf_llff_data/fern/  --model_path  output/fern --iteration 10000
+python render.py --source_path data/nerf_llff_data/horns/ --model_path output/llff/horns --iteration 10000
 ```
 
 To render a video:
 
 ```
-python render.py --source_path dataset/nerf_llff_data/fern/  --model_path  output/fern --iteration 10000  --video  --fps 30
+python render.py --source_path data/nerf_llff_data/horns/ --model_path output/llff/horns --iteration 10000 --video --fps 30
 ```
 
 ## Evaluation
 The training code train.py automatically save evaluation scores, you can also run the following script to evaluate the model.
 
 ```
-python metrics.py --source_path dataset/nerf_llff_data/horns/  --model_path  output/horns --iteration 10000
+python metrics.py --source_path data/nerf_llff_data/horns/ --model_path output/llff/horns --iteration 10000
 ```
 
 ## Acknowledgement
