@@ -36,6 +36,15 @@ git clone https://github.com/wuyou012/SIDGaussian.git
 conda env create --file environment.yml
 conda activate SIDGaussian
 ```
+or you can use:
+```bash
+conda create -n SIDGaussian python=3.10
+conda activate SIDGaussian
+pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117
+git clone https://github.com/wuyou012/SIDGaussian.git
+cd SIDGaussian
+pip install -r requirements.txt
+```
 We use **CUDA 11.7** as our environment.
 
 ## Data Preparation
