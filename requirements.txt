@@ -1,0 +1,12 @@
+submodules/diff-gaussian-rasterization-confidence
+submodules/simple-knn
+imageio==2.31.2
+matplotlib==3.5.3
+natsort==8.4.0
+numpy==1.24.4
+opencv_python==4.8.1.78
+open3d==0.17.0
+plyfile==0.8.1
+tensorboard==2.14.0
+timm==0.9.12
+torchmetrics==1.2.0
