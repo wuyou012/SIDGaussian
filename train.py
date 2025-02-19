@@ -410,9 +410,9 @@ if __name__ == "__main__":
     parser.add_argument('--detect_anomaly', action='store_true', default=False)
     parser.add_argument("--test_iterations", nargs="+", type=int,
                         default=[5000, 6000, 7000, 8000, 9000, 10000])
-    parser.add_argument("--save_iterations", nargs="+", type=int, default=[])
+    parser.add_argument("--save_iterations", nargs="+", type=int, default=[10000]) # save pointcloud
     parser.add_argument("--quiet", action="store_true")
-    parser.add_argument("--checkpoint_iterations", nargs="+", type=int, default=[])
+    parser.add_argument("--checkpoint_iterations", nargs="+", type=int, default=[10000])  # save checkpoint
     parser.add_argument("--start_checkpoint", type=str, default=None)
     parser.add_argument("--train_bg", action="store_true")
     parser.add_argument("--W", type=float, default=0.5) # window
