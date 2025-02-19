@@ -49,8 +49,8 @@ We use **CUDA 11.7** as our environment.
 
 ## Data Preparation
 We use dense point cloud from [FSGS](https://github.com/VITA-Group/FSGS?tab=readme-ov-file#data-preparation) for initialization.
-
 You may directly download through [this link](https://drive.google.com/drive/folders/1lYqZLuowc84Dg1cyb8ey3_Kb-wvPjDHA).
+
 For the public dataset, you can directly download the llff data through [here](https://drive.google.com/drive/folders/1PXEDEECbxhEFG_PkMekJuqVRZB4roDR_?usp=sharing) and combine with the point cloud
 If you are interested in mipnerf360 dataset, you can download
 ```dash
