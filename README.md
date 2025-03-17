@@ -26,6 +26,7 @@
   <img src="assets/flower_comparison.gif" alt="Flower Comparison" width="320" style="margin: 0 10px;">
   <img src="assets/horns_comparison.gif" alt="Horns Comparison" width="320" style="margin: 0 10px;">
 
+## Pipeline
 <p align="center">
   <img src="assets/Pipeline.png" alt="pipeline" width="100%">
 </p>
