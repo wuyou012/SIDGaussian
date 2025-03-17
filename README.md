@@ -23,17 +23,8 @@
 
 <div align="center" style="display: flex; justify-content: center;">
 
-  <video width="320" height="240" controls style="margin: 0 10px;">
-    <source src="assets/flower_comparison.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-
-  <video width="320" height="240" controls style="margin: 0 10px;">
-    <source src="assets/horns_comparison.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-
-</div>
+  <img src="assets/flower_comparison.gif" alt="Flower Comparison" width="320" style="margin: 0 10px;">
+  <img src="assets/horns_comparison.gif" alt="Horns Comparison" width="320" style="margin: 0 10px;">
 
 <p align="center">
   <img src="assets/Pipeline.png" alt="pipeline" width="100%">
