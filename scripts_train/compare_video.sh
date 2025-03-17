@@ -10,9 +10,11 @@ do
 
     python render_compare.py \
     --folder1 "/home/SIDGaussian/output/3dgs/$scene/video/ours_30000" \
-    --folder2 "/home/SIDGaussian/output/output_final/$scene/video/ours_10000" \
+    --folder2 "/home/SIDGaussian/output/output_A2D2C2_07_final_2071/$scene/video/ours_12000" \
     --output "$OUTPUT" \
-    --fps 15
+    --fps 15 \
+    --gif \
+    --gif-quality 70 \
 
-  echo "generate: $OUTPUT"
+  echo "end processing: $OUTPUT"
 done

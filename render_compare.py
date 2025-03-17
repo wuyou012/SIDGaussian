@@ -6,8 +6,13 @@ import argparse
 import cv2
 import numpy as np
 from tqdm import tqdm
+import imageio
+import tempfile
+from PIL import Image
+import shutil
 
-def create_comparison_video(folder1, folder2, output_path, fps=30, width=None, height=None, add_text=True):
+def create_comparison_video(folder1, folder2, output_path, fps=30, width=None, height=None, add_text=True, 
+                           gif=False, gif_quality=70, downsample=1):
     """
     read the same files for two folders and create a video to compare the images in the two folders.
     
@@ -63,16 +68,27 @@ def create_comparison_video(folder1, folder2, output_path, fps=30, width=None, h
     if not os.path.exists(output_root):          
         os.mkdir(output_root) 
         
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    video_writer = cv2.VideoWriter(output_path, fourcc, fps, (combined_width, combined_height))
+    frames = []
+    temp_dir = None
     
+    if gif:
+        temp_dir = tempfile.mkdtemp()
+        print(f"use temp root for git: {temp_dir}")
+    else:
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        video_writer = cv2.VideoWriter(output_path, fourcc, fps, (combined_width, combined_height))
+
     folder1_name = os.path.basename(os.path.normpath(folder1))
     folder1_name = '3DGS_30000'
     folder2_name = os.path.basename(os.path.normpath(folder2))
     folder2_name = 'Ours_10000'
     
 
-    for img_file in tqdm(common_files, desc="generate compare video"):
+    for i, img_file in enumerate(tqdm(common_files, desc="generate " + ("GIF" if gif else "video"))):
+
+        if gif and downsample > 1 and i % downsample != 0:
+            continue
+            
         img1_path = os.path.join(folder1, img_file)
         img2_path = os.path.join(folder2, img_file)
         
@@ -80,21 +96,18 @@ def create_comparison_video(folder1, folder2, output_path, fps=30, width=None, h
         img2 = cv2.imread(img2_path)
         
         if img1 is None or img2 is None:
-            print(f"warning: can;t read {img_file}, skip")
+            print(f"warning, can't read {img_file}, skip")
             continue
 
         img1_resized = cv2.resize(img1, target_size)
         img2_resized = cv2.resize(img2, target_size)
-        
-        # add label
+
         if add_text:
             font = cv2.FONT_HERSHEY_SIMPLEX
             font_scale = 1
             font_thickness = 2
-            text_color = (255, 255, 255)  # white
-            bg_color = (0, 0, 0)  # background color
+            text_color = (255, 255, 255)  # 白色
             
-
             cv2.putText(
                 img1_resized, 
                 folder1_name, 
@@ -104,6 +117,7 @@ def create_comparison_video(folder1, folder2, output_path, fps=30, width=None, h
                 text_color, 
                 font_thickness
             )
+            
             cv2.putText(
                 img2_resized, 
                 folder2_name, 
@@ -115,7 +129,7 @@ def create_comparison_video(folder1, folder2, output_path, fps=30, width=None, h
             )
         
         combined_img = np.hstack((img1_resized, img2_resized))
-
+        
         if add_text:
             cv2.putText(
                 combined_img, 
@@ -126,12 +140,37 @@ def create_comparison_video(folder1, folder2, output_path, fps=30, width=None, h
                 text_color, 
                 1
             )
+
+        if gif:
+            # OpenCV used BGR，need to convert to RGB fot GIF
+            combined_img_rgb = cv2.cvtColor(combined_img, cv2.COLOR_BGR2RGB)
+            frames.append(Image.fromarray(combined_img_rgb))
+        else:
+            video_writer.write(combined_img)
+    
+    if gif:
+        # save to GIF
+        print(f"creating GIF, need for a well...")
         
+        optimize = True if gif_quality > 70 else False
+        frames[0].save(
+            output_path,
+            format='GIF',
+            append_images=frames[1:],
+            save_all=True,
+            duration=int(1000/fps),  # ms
+            loop=0,  # 0 for infinite loop 
+            optimize=optimize,
+            quality=100-gif_quality  # lower quality means smaller file size
+        )
 
-        video_writer.write(combined_img)
-
-    video_writer.release()
-    print(f"comparsion video saved to: {output_path}")
+        if temp_dir and os.path.exists(temp_dir):
+            shutil.rmtree(temp_dir)
+            
+        print(f"GIF file saved to: {output_path}")
+    else:
+        video_writer.release()
+        print(f"MP4 video saved to: {output_path}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='create comparison video for two folders')
@@ -142,9 +181,16 @@ if __name__ == "__main__":
     parser.add_argument('--width', type=int, default=None, help='weight for adjust')
     parser.add_argument('--height', type=int, default=None, help='height for adjust')
     parser.add_argument('--no-text', action='store_true', help='whether to add text')
-    
+    parser.add_argument('--gif', action='store_true', help='GIF instead of MP4')
+    parser.add_argument('--gif-quality', type=int, default=70, help='GIF quality(1-100)')
+    parser.add_argument('--downsample', type=int, default=1, help='GIF downsample rate')
+        
     args = parser.parse_args()
-    
+
+    if args.gif and args.output.lower().endswith('.mp4'):
+        args.output = os.path.splitext(args.output)[0] + '.gif'
+        print(f"auto change the file name to: {args.output}")
+        
     create_comparison_video(
         args.folder1, 
         args.folder2, 
@@ -152,5 +198,8 @@ if __name__ == "__main__":
         args.fps, 
         args.width, 
         args.height, 
-        not args.no_text
+        not args.no_text,
+        args.gif,
+        args.gif_quality,
+        args.downsample
     )
