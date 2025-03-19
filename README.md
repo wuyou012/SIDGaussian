@@ -101,6 +101,12 @@ To render a video:
 python render.py --source_path data/nerf_llff_data/horns/ --model_path output/llff/horns --iteration 10000 --video --fps 30
 ```
 
+Render the .gif or .mp4 for demo as shown in GitHub:
+
+```
+python render.py --source_path data/nerf_llff_data/horns/ --model_path output/llff/horns --iteration 10000 --video --fps 30
+```
+
 ## Evaluation
 The training code train.py automatically save evaluation scores, you can also run the following script to evaluate the model.
 
